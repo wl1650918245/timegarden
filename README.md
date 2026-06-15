@@ -83,6 +83,10 @@ Installer output in `dist/`.
 | Double-click flower | Nano → Full |
 | Right-click flower | Context menu |
 
+## Privacy
+
+All data is stored **locally on your computer** (`user-data/` directory). No telemetry, no analytics, no cloud sync, no network requests. Your tasks, deadlines, and focus records never leave your machine.
+
 ## License
 
 MIT
