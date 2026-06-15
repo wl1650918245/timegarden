@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; style-src 'self' 'unsafe-inline'; script-src 'self' 'unsafe-inline'; img-src 'self' data:;" />
+<title>周计划盆栽</title>
+<link id="theme-stylesheet" rel="stylesheet" href="style.css" />
+</head>
+<body>
+
+<!-- ===== 迷你模式（收起态）- 花盆治愈版 ===== -->
+<div id="mini-view">
+  <div id="mini-drag-handle">
+    <div id="mini-handle-right">
+      <button id="btn-theme-mini" title="切换主题">🎨</button>
+      <button id="btn-nano-mini" title="收起到悬浮花">🌸</button>
+    </div>
+    <div class="drag-dots"></div>
+  </div>
+  <div id="bubble-scene">
+    <!-- 顶部日期 + 进度条（合并一行） -->
+    <div id="plant-top-bar">
+      <span id="plant-date">周四 · 第23周</span>
+      <div id="plant-progress-wrap"><div class="plant-progress-fill" id="plantProgressFill" style="width:0%"></div></div>
+    </div>
+
+    <!-- 花盆居中 -->
+    <div id="plant-pot-wrap">
+      <!-- 空状态：漂浮种子 -->
+      <div id="seed-orb">
+        <div class="seed-core"></div>
+        <div class="seed-ring"></div>
+      </div>
+      <div id="seed-sparkles"></div>
+      <svg id="plant-svg-mini" viewBox="-20 -35 220 275" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="potGrad" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="0%" stop-color="#d4845a"/>
+            <stop offset="100%" stop-color="#b8704a"/>
+          </linearGradient>
+          <linearGradient id="leafG" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#7abf5a"/>
+            <stop offset="100%" stop-color="#4a8c3f"/>
+          </linearGradient>
+          <linearGradient id="leafG2" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#8ccf6a"/>
+            <stop offset="100%" stop-color="#5a9c4f"/>
+          </linearGradient>
+        </defs>
+        <path d="M20 175 L38 130 L122 130 L140 175 Z" fill="url(#potGrad)" stroke="#a0603a" stroke-width="1.5"/>
+        <rect x="16" y="124" width="128" height="12" rx="4" fill="#d4946a" stroke="#a0603a" stroke-width="1"/>
+        <ellipse cx="80" cy="132" rx="55" ry="6" fill="#4a3020" opacity="0.5"/>
+        <g class="plant-stem">
+          <path d="M80 128 Q72 80 82 50 Q88 25 78 5" fill="none" stroke="#3a7c2f" stroke-width="5" stroke-linecap="round" class="stem-body"/>
+          <g class="plant-leaf" data-task="0">
+            <path class="leaf-shape" d="M80 85 Q50 60 40 72 Q54 68 80 85" fill="url(#leafG)" stroke="#2d6c22" stroke-width="1"/>
+            <path class="leaf-vein" d="M80 85 Q62 74 46 70" fill="none" stroke="#2d6c22" stroke-width="0.8" opacity="0.4"/>
+            <circle class="flower-bud" cx="40" cy="70" r="5" fill="#f5a0b8" opacity="0"/>
+          </g>
+          <g class="plant-leaf" data-task="1">
+            <path class="leaf-shape" d="M84 65 Q118 46 130 58 Q114 54 84 65" fill="url(#leafG2)" stroke="#2d6c22" stroke-width="1"/>
+            <path class="leaf-vein" d="M84 65 Q106 53 124 56" fill="none" stroke="#2d6c22" stroke-width="0.8" opacity="0.4"/>
+            <circle class="flower-bud" cx="130" cy="56" r="5" fill="#f5a0b8" opacity="0"/>
+          </g>
+          <g class="plant-leaf" data-task="2">
+            <path class="leaf-shape" d="M78 100 Q46 92 36 106 Q54 100 78 100" fill="url(#leafG)" stroke="#2d6c22" stroke-width="1"/>
+            <path class="leaf-vein" d="M78 100 Q58 98 42 104" fill="none" stroke="#2d6c22" stroke-width="0.8" opacity="0.4"/>
+            <circle class="flower-bud" cx="36" cy="104" r="5" fill="#f5a0b8" opacity="0"/>
+          </g>
+          <g class="plant-leaf" data-task="3">
+            <path class="leaf-shape" d="M84 110 Q116 106 128 116 Q112 112 84 110" fill="url(#leafG2)" stroke="#2d6c22" stroke-width="1"/>
+            <path class="leaf-vein" d="M84 110 Q106 110 122 114" fill="none" stroke="#2d6c22" stroke-width="0.8" opacity="0.4"/>
+            <circle class="flower-bud" cx="128" cy="114" r="5" fill="#f5a0b8" opacity="0"/>
+          </g>
+          <g class="main-flower">
+            <ellipse cx="74" cy="2" rx="8" ry="7" fill="#f5a0b8" opacity="0.95"/>
+            <ellipse cx="82" cy="2" rx="8" ry="7" fill="#f5a0b8" opacity="0.95"/>
+            <ellipse cx="78" cy="-8" rx="7" ry="6" fill="#f0b8c8" opacity="0.9"/>
+            <ellipse cx="66" cy="6" rx="6" ry="5" fill="#f0b8c8" opacity="0.7"/>
+            <ellipse cx="90" cy="6" rx="6" ry="5" fill="#f0b8c8" opacity="0.7"/>
+            <circle cx="78" cy="-2" r="3.5" fill="#f5d76e"/>
+          </g>
+          <path class="vine" d="M32 128 Q12 148 16 168" fill="none" stroke="#5a9c4f" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="16" cy="168" rx="5" ry="3.5" fill="#7abf5a"/>
+          <path class="vine" d="M128 128 Q148 148 144 168" fill="none" stroke="#5a9c4f" stroke-width="2" stroke-linecap="round"/>
+          <ellipse cx="144" cy="168" rx="5" ry="3.5" fill="#7abf5a"/>
+        </g>
+      </svg>
+      <div id="water-container"></div>
+      <div id="rain-container"></div>
+      <div id="plant-speech"></div>
+    </div>
+
+    <!-- 空状态引导 -->
+    <div id="empty-state-hint" class="empty-state-hint">点击 + 种下第一颗种子 🌰</div>
+
+    <!-- 气泡任务 -->
+    <div id="bubble-list"></div>
+
+    <!-- 已完成沉底 -->
+    <div id="plant-done-list"></div>
+  </div>
+</div>
+
+<!-- ===== Nano 模式（悬浮花态） ===== -->
+<div id="nano-view" class="hidden">
+  <!-- 专注信息条（计时中浮现，点击⏱停止） -->
+  <div id="nano-focus-info">
+    <span class="focus-icon" id="focus-icon-click" title="点击停止专注">⏱</span>
+    <span id="focus-task-name" class="focus-task-name"></span>
+    <span id="focus-timer" class="focus-timer">0:00</span>
+  </div>
+
+  <!-- 小花 -->
+  <div id="nano-flower">
+    <svg width="42" height="54" viewBox="0 -8 42 54" id="nanoFlowerSvg">
+      <path d="M21 36 Q19 26 21 18 Q23 12 21 8" fill="none" stroke="#5a9c4f" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M21 28 Q10 24 8 30 Q14 28 21 28" fill="#6aaa4a" opacity="0.85"/>
+      <path d="M21 23 Q33 18 35 24 Q29 22 21 23" fill="#7abf5a" opacity="0.85"/>
+      <g id="nanoPetalGroup" transform="translate(21,8)">
+        <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5a0b8" opacity="0.9" class="nano-petal" transform="rotate(0)"/>
+        <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5b0c8" opacity="0.9" class="nano-petal" transform="rotate(72)"/>
+        <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5a0b8" opacity="0.9" class="nano-petal" transform="rotate(144)"/>
+        <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5b0c8" opacity="0.9" class="nano-petal" transform="rotate(216)"/>
+        <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5a0b8" opacity="0.9" class="nano-petal" transform="rotate(288)"/>
+        <circle cx="0" cy="0" r="2.5" fill="#f5d76e"/>
+      </g>
+    </svg>
+    <div id="nano-status-dot" class="dot-bloom"></div>
+  </div>
+
+  <!-- 悬停预览面板 -->
+  <div id="nano-hover-preview">
+    <div class="nano-hover-header">
+      <span class="nano-hover-day" id="nanoHoverDay">周四</span>
+      <span class="nano-hover-week" id="nanoHoverWeek">第23周</span>
+    </div>
+    <div class="nano-hover-progress">
+      <div class="nano-hover-progress-fill" id="nanoHoverProgressFill" style="width:0%"></div>
+    </div>
+    <div class="nano-hover-stats">
+      <div class="nano-hover-stat stat-urgent">
+        <span class="nano-hover-stat-num" id="nanoStatUrgent">0</span>
+        <span class="nano-hover-stat-label">紧急</span>
+      </div>
+      <div class="nano-hover-stat stat-done">
+        <span class="nano-hover-stat-num" id="nanoStatDone">0</span>
+        <span class="nano-hover-stat-label">已完成</span>
+      </div>
+      <div class="nano-hover-stat stat-total">
+        <span class="nano-hover-stat-num" id="nanoStatTotal">0</span>
+        <span class="nano-hover-stat-label">总任务</span>
+      </div>
+    </div>
+    <div class="nano-hover-tasks" id="nanoHoverTasks"></div>
+  </div>
+
+  <!-- 右键菜单 -->
+  <div id="nano-context-menu">
+    <div class="nano-ctx-item" data-nano-action="add-task"><span class="nano-ctx-icon">📝</span>添加任务</div>
+    <div class="nano-ctx-item" data-nano-action="view-progress"><span class="nano-ctx-icon">📊</span>查看本周进度</div>
+    <div class="nano-ctx-divider"></div>
+    <div class="nano-ctx-item" data-nano-action="to-mini"><span class="nano-ctx-icon">🪴</span>展开到花盆</div>
+    <div class="nano-ctx-item" data-nano-action="to-full"><span class="nano-ctx-icon">📋</span>展开到面板</div>
+    <div class="nano-ctx-divider"></div>
+    <div class="nano-ctx-item nano-ctx-exit" data-nano-action="to-tray"><span class="nano-ctx-icon">✕</span>退到托盘</div>
+  </div>
+</div>
+
+<!-- ===== 完整模式（展开态） ===== -->
+<div id="full-view" class="hidden">
+  <div id="titlebar">
+    <div id="titlebar-left">
+      <span id="status-emoji">🌸</span>
+      <span id="status-text">第23周 · 周三</span>
+      <div id="titlebar-quick-btns">
+        <button id="btn-theme-full" title="切换主题">🎨</button>
+        <button id="btn-nano" title="收起到悬浮花">🌸</button>
+      </div>
+    </div>
+    <div id="titlebar-center">
+      <span id="status-progress"></span>
+    </div>
+    <div id="window-controls">
+      <button id="btn-shrink" title="收到花盆">▾</button>
+      <button id="btn-minimize" title="最小化">─</button>
+      <button id="btn-close" title="隐藏到托盘">✕</button>
+    </div>
+  </div>
+
+  <div id="app">
+    <!-- 左侧 -->
+    <div id="left-panel">
+      <div id="full-top-section">
+        <div id="plant-area-full">
+          <div id="seed-orb-full" class="seed-orb">
+            <div class="seed-core"></div>
+            <div class="seed-ring"></div>
+          </div>
+          <svg id="plant-svg-full" viewBox="-30 -45 280 310" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="potGradF" x1="0" y1="0" x2="0" y2="1">
+              <stop offset="0%" stop-color="#d4845a"/>
+              <stop offset="100%" stop-color="#b8704a"/>
+            </linearGradient>
+            <linearGradient id="leafGF" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#7abf5a"/>
+              <stop offset="100%" stop-color="#4a8c3f"/>
+            </linearGradient>
+            <linearGradient id="leafG2F" x1="0" y1="0" x2="1" y2="1">
+              <stop offset="0%" stop-color="#8ccf6a"/>
+              <stop offset="100%" stop-color="#5a9c4f"/>
+            </linearGradient>
+          </defs>
+          <path d="M25 195 L45 145 L155 145 L175 195 Z" fill="url(#potGradF)" stroke="#a0603a" stroke-width="1.5"/>
+          <rect x="20" y="138" width="160" height="14" rx="5" fill="#d4946a" stroke="#a0603a" stroke-width="1.2"/>
+          <ellipse cx="100" cy="148" rx="68" ry="8" fill="#4a3020" opacity="0.5"/>
+          <g class="plant-stem">
+            <path d="M100 142 Q88 90 100 55 Q108 28 96 5" fill="none" stroke="#3a7c2f" stroke-width="6" stroke-linecap="round" class="stem-body"/>
+            <g class="plant-leaf" data-task="0">
+              <path class="leaf-shape" d="M100 95 Q62 65 48 80 Q72 75 100 95" fill="url(#leafGF)" stroke="#2d6c22" stroke-width="1.2"/>
+              <path class="leaf-vein" d="M100 95 Q74 80 54 78" fill="none" stroke="#2d6c22" stroke-width="1" opacity="0.4"/>
+              <circle class="flower-bud" cx="48" cy="77" r="6" fill="#f5a0b8" opacity="0"/>
+            </g>
+            <g class="plant-leaf" data-task="1">
+              <path class="leaf-shape" d="M104 72 Q146 50 162 66 Q142 60 104 72" fill="url(#leafG2F)" stroke="#2d6c22" stroke-width="1.2"/>
+              <path class="leaf-vein" d="M104 72 Q134 58 156 64" fill="none" stroke="#2d6c22" stroke-width="1" opacity="0.4"/>
+              <circle class="flower-bud" cx="162" cy="64" r="6" fill="#f5a0b8" opacity="0"/>
+            </g>
+            <g class="plant-leaf" data-task="2">
+              <path class="leaf-shape" d="M96 115 Q56 106 44 124 Q66 116 96 115" fill="url(#leafGF)" stroke="#2d6c22" stroke-width="1.2"/>
+              <path class="leaf-vein" d="M96 115 Q70 112 50 120" fill="none" stroke="#2d6c22" stroke-width="1" opacity="0.4"/>
+              <circle class="flower-bud" cx="44" cy="122" r="6" fill="#f5a0b8" opacity="0"/>
+            </g>
+            <g class="plant-leaf" data-task="3">
+              <path class="leaf-shape" d="M106 128 Q146 122 158 136 Q138 130 106 128" fill="url(#leafG2F)" stroke="#2d6c22" stroke-width="1.2"/>
+              <path class="leaf-vein" d="M106 128 Q134 126 152 132" fill="none" stroke="#2d6c22" stroke-width="1" opacity="0.4"/>
+              <circle class="flower-bud" cx="158" cy="134" r="6" fill="#f5a0b8" opacity="0"/>
+            </g>
+            <g class="main-flower">
+              <ellipse cx="92" cy="3" rx="11" ry="9" fill="#f5a0b8" opacity="0.95"/>
+              <ellipse cx="102" cy="3" rx="11" ry="9" fill="#f5a0b8" opacity="0.95"/>
+              <ellipse cx="97" cy="-10" rx="10" ry="8" fill="#f0b8c8" opacity="0.9"/>
+              <ellipse cx="80" cy="8" rx="8" ry="7" fill="#f0b8c8" opacity="0.7"/>
+              <ellipse cx="114" cy="8" rx="8" ry="7" fill="#f0b8c8" opacity="0.7"/>
+              <circle cx="97" cy="-2" r="5" fill="#f5d76e"/>
+            </g>
+            <path class="vine" d="M36 142 Q12 165 18 188" fill="none" stroke="#5a9c4f" stroke-width="2.5" stroke-linecap="round"/>
+            <ellipse cx="18" cy="188" rx="6" ry="4" fill="#7abf5a"/>
+            <path class="vine" d="M164 142 Q188 165 182 188" fill="none" stroke="#5a9c4f" stroke-width="2.5" stroke-linecap="round"/>
+            <ellipse cx="182" cy="188" rx="6" ry="4" fill="#7abf5a"/>
+          </g>
+        </svg>
+        <div id="water-container-full" class="water-container"></div>
+        <div id="rain-container-full" class="rain-container"></div>
+        <div id="plant-speech-full" class="plant-speech-bubble"></div>
+      </div>
+      <!-- 花瓣进度环 -->
+      <div id="petal-progress-ring">
+        <svg viewBox="0 0 100 100" width="100" height="100">
+          <ellipse cx="50" cy="6" rx="8" ry="11" class="petal p1" transform="rotate(0,50,50)"/>
+          <ellipse cx="50" cy="6" rx="8" ry="11" class="petal p2" transform="rotate(72,50,50)"/>
+          <ellipse cx="50" cy="6" rx="8" ry="11" class="petal p3" transform="rotate(144,50,50)"/>
+          <ellipse cx="50" cy="6" rx="8" ry="11" class="petal p4" transform="rotate(216,50,50)"/>
+          <ellipse cx="50" cy="6" rx="8" ry="11" class="petal p5" transform="rotate(288,50,50)"/>
+          <circle cx="50" cy="50" r="30" fill="var(--panel-bg)"/>
+        </svg>
+        <div id="ring-center-text">
+          <span id="ring-day-num">3</span>
+          <span id="ring-day-label">周三</span>
+        </div>
+      </div>
+      <!-- 旧进度条隐藏 -->
+      <div id="week-progress" style="display:none;">
+        <div class="day-label" data-day="1">一</div>
+        <div class="day-label" data-day="2">二</div>
+        <div class="day-label" data-day="3">三</div>
+        <div class="day-label" data-day="4">四</div>
+        <div class="day-label" data-day="5">五</div>
+      </div>
+      </div><!-- /full-top-section -->
+      <div id="section-header-important">
+        <span class="section-icon">★</span>
+        <span>本周最重要的事</span>
+        <span id="important-count" class="count-badge">0/0</span>
+      </div>
+      <div id="important-list" class="task-list drop-target"></div>
+      <button id="add-important-btn" class="add-btn">+ 添加要事</button>
+    </div>
+    <div id="panel-divider"></div>
+    <!-- 右侧 -->
+    <div id="right-panel">
+      <div id="right-toggle">
+        <span class="section-icon">☐</span>
+        <span>待办清单</span>
+        <span id="todo-count" class="count-badge">0</span>
+        <span id="collapse-icon">◀</span>
+      </div>
+      <div id="todo-container" class="collapsible-content">
+        <div id="priority-summary" style="font-size:10px;color:var(--text-secondary);padding:2px 0;min-height:16px;"></div>
+        <div id="todo-list" class="task-list drop-target"></div>
+        <button id="add-todo-btn" class="add-btn">+ 添加待办</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 引导覆盖层 -->
+<div id="onboarding-overlay">
+  <div id="onboarding-card">
+    <div id="onboarding-plant">🌰</div>
+    <div id="onboarding-title"></div>
+    <div id="onboarding-desc"></div>
+    <div id="onboarding-dots"><span></span><span></span><span></span></div>
+    <button id="onboarding-next">开始</button>
+  </div>
+</div>
+
+<!-- 完成庆祝覆盖层 -->
+<div id="celebration-overlay">
+  <div id="celebration-flower">🌸</div>
+  <div id="celebration-text">本周完美!</div>
+  <div id="celebration-sub"></div>
+  <div id="celebration-confetti"></div>
+</div>
+
+<!-- 粒子容器 -->
+<div id="particle-container"></div>
+
+<script src="app.js"></script>
+</body>
+</html>

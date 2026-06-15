@@ -1,0 +1,1759 @@
+﻿/* ===== Warm Ceramic — Design Philosophy =====
+   Warm minimalism inspired by Japanese pottery and layered paper.
+   Colors are drawn from: sunlit clay, sage leaves, faded cherry blossoms,
+   and warm parchment. Depth comes from soft shadows, not harsh borders.
+   Every radius, padding, and transition is deliberate. */
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+:root {
+  /* --- Core palette --- */
+  --bg: #f7f0e9;
+  --bg-end: #f0e8dd;
+  --panel-bg: rgba(255, 252, 248, 0.85);
+  --panel-bg-solid: #fffcf8;
+  --card-bg: #ffffff;
+  --card-bg-warm: #fefcf9;
+  --border: #e6ddd2;
+  --border-light: #f0e8e0;
+
+  /* --- Text --- */
+  --text-primary: #4d3e30;
+  --text-secondary: #ab9a88;
+  --text-muted: #c8b8a4;
+
+  /* --- Accent --- */
+  --accent-pink: #e07a8f;
+  --accent-pink-soft: #f7e0e6;
+  --accent-green: #8fc48c;
+  --accent-green-soft: #e6f3e4;
+  --accent-yellow: #edc48a;
+  --accent-yellow-soft: #faf0e0;
+  --accent-purple: #bba8d4;
+  --accent-soft: #f3ede6;
+  --accent-warm: #f5ede4;
+
+  /* --- Semantic --- */
+  --danger: #d07468;
+  --danger-soft: #fae6e4;
+
+  /* --- Plant system --- */
+  --leaf-green: #8fc48c;
+  --leaf-wilt: #d4b880;
+  --leaf-dead: #bca488;
+  --leaf-dead-dark: #a08868;
+  --flower-pink: #edb0c0;
+  --flower-center: #f5d76e;
+
+  /* --- Urgency --- */
+  --urgent-green: #5a8a5a;
+  --urgent-yellow: #b08840;
+  --urgent-orange: #d08040;
+  --urgent-red: #d46868;
+  --urgent-done: #d08898;
+
+  /* --- Shadows --- */
+  --shadow-xs: 0 1px 3px rgba(80, 60, 40, 0.06);
+  --shadow-sm: 0 2px 8px rgba(80, 60, 40, 0.08);
+  --shadow-md: 0 4px 16px rgba(80, 60, 40, 0.10);
+  --shadow-lg: 0 8px 32px rgba(80, 60, 40, 0.14);
+  --shadow-xl: 0 12px 48px rgba(80, 60, 40, 0.18);
+  --shadow-glow-green: 0 0 20px rgba(143, 196, 140, 0.25);
+  --shadow-glow-pink: 0 0 20px rgba(224, 122, 143, 0.20);
+
+  /* --- Radius --- */
+  --radius-xs: 6px;
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-xl: 26px;
+  --radius-full: 9999px;
+
+  /* --- Font --- */
+  --font: 'Segoe UI', 'PingFang SC', 'Microsoft YaHei', -apple-system, sans-serif;
+
+  /* --- Transitions --- */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --duration-fast: 0.2s;
+  --duration-normal: 0.35s;
+  --duration-slow: 0.5s;
+}
+
+html { height: 100%; background: var(--bg); }
+
+body {
+  font-family: var(--font);
+  background: linear-gradient(165deg, var(--bg) 0%, var(--bg-end) 100%);
+  color: var(--text-primary);
+  overflow: hidden;
+  user-select: none;
+  height: 100vh;
+  width: 100vw;
+}
+
+body.mini-mode { border-radius: var(--radius-xl); }
+/* ===== Mini View — Pot & Bubble Scene ===== */
+#mini-view {
+  display: flex;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(170deg, var(--bg) 0%, var(--bg-end) 50%, #ece2d8 100%);
+  border: none;
+  position: relative;
+}
+
+#mini-view.hidden { display: none; }
+
+/* Drag handle — ceramic rim detail */
+#mini-drag-handle {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 18px;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: grab;
+  background: linear-gradient(180deg, rgba(255,252,248,0.5) 0%, transparent 100%);
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+}
+
+.drag-dots {
+  width: 22px; height: 2px;
+  border-radius: var(--radius-full);
+  background: var(--text-secondary);
+  opacity: 0.25;
+  transition: opacity var(--duration-normal);
+}
+
+#mini-drag-handle:hover .drag-dots { opacity: 0.6; }
+
+#mini-handle-right {
+  position: absolute; right: 4px; top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; gap: 2px;
+}
+#btn-nano-mini {
+  border: none; background: transparent; font-size: 14px;
+  cursor: pointer; opacity: 0.35;
+  transition: opacity var(--duration-fast);
+  line-height: 1; padding: 2px;
+}
+#btn-nano-mini:hover { opacity: 0.85; }
+
+#btn-theme-mini {
+  border: none; background: transparent; font-size: 14px; cursor: pointer;
+  opacity: 0.35; line-height: 1; padding: 2px;
+}
+#btn-theme-mini:hover { opacity: 0.85; }
+
+/* ===== Bubble Scene — The ceramic garden ===== */
+#bubble-scene {
+  flex: 1;
+  position: relative;
+  display: block;
+  cursor: pointer;
+  overflow: hidden;
+  min-height: 270px;
+  padding-top: 20px;
+}
+
+#plant-top-bar {
+  position: absolute;
+  top: 22px; left: 14px; right: 14px;
+  z-index: 8;
+  display: flex; align-items: center; gap: 10px;
+  pointer-events: none;
+}
+
+#plant-date {
+  font-size: 9px; font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 1.5px;
+  white-space: nowrap;
+}
+
+#plant-progress-wrap {
+  flex: 1; height: 3px;
+  background: rgba(180, 160, 140, 0.35);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.04);
+}
+
+.plant-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #b8e89a 0%, #7ec85a 25%, #5aac40 60%, #3d8a28 100%);
+  border-radius: var(--radius-full);
+  transition: width 0.5s var(--ease-out);
+  box-shadow: 0 0 8px rgba(110,180,60,0.40), inset 0 1px 0 rgba(255,255,255,0.30);
+}
+
+/* Pot — centered bottom, gentle sway */
+#plant-pot-wrap {
+  position: absolute;
+  left: 50%; bottom: 72px;
+  transform: translateX(-50%);
+  z-index: 5;
+  filter: drop-shadow(0 4px 16px rgba(60,40,20,0.10));
+  animation: potSway 5s ease-in-out infinite;
+}
+
+@keyframes potSway {
+  0%, 100% { transform: translateX(-50%) rotate(0deg); }
+  50% { transform: translateX(-50%) rotate(2deg); }
+}
+
+#plant-svg-mini { width: 130px; height: 170px; position: relative; z-index: 10; }
+
+/* ===== Bubble Tasks — floating around the pot ===== */
+#bubble-list {
+  position: absolute;
+  top: 72px; left: 0; right: 0; bottom: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+#bubble-list > * { pointer-events: auto; }
+
+.mini-task-bubble {
+  position: absolute; z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px 6px 8px;
+  border-radius: var(--radius-lg);
+  font-size: 10px;
+  font-weight: 500;
+  white-space: nowrap;
+  cursor: pointer;
+  transition: all 0.3s var(--ease-spring);
+  pointer-events: auto;
+  max-width: 180px;
+  animation: bubbleFloatIn 0.5s var(--ease-spring) both;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255,255,255,0.5);
+  box-shadow: 0 2px 12px rgba(80,60,40,0.08), 0 0 0 1px rgba(255,255,255,0.3);
+}
+
+@keyframes bubbleFloatIn {
+  from { opacity: 0; transform: scale(0.85) translateY(12px); }
+  to { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.mini-task-bubble:hover {
+  transform: translateY(-3px) scale(1.04);
+  box-shadow: 0 8px 24px rgba(80,60,40,0.14);
+  border-color: rgba(224,122,143,0.18);
+}
+
+.mini-task-bubble .mtb-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%; flex-shrink: 0;
+  box-shadow: 0 0 6px currentColor;
+}
+
+.mini-task-bubble .mtb-text {
+  flex: 1; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+  line-height: 1.4; min-width: 0;
+  max-width: 90px;
+  font-size: 11px; color: var(--text-primary);
+  font-weight: 500;
+}
+
+.mini-task-bubble .mtb-urgency {
+  font-size: 9px; font-weight: 600;
+  flex-shrink: 0; padding: 2px 9px;
+  border-radius: var(--radius-full);
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+}
+
+/* Urgency colors — refined gradients */
+.mtb-green { background: linear-gradient(135deg, #e8f3e8, #dceecf); color: #4a804a; border-color: #b8d8b8; }
+.mtb-green .mtb-dot { background: #4a804a; }
+.mtb-green .mtb-urgency { background: #c8e4c8; color: #4a804a; }
+
+.mtb-yellow { background: linear-gradient(135deg, #fcf3e4, #f8eace); color: #9a7838; border-color: #eed8b0; }
+.mtb-yellow .mtb-dot { background: #b08840; }
+.mtb-yellow .mtb-urgency { background: #eed8a8; color: #8a7030; }
+
+.mtb-orange { background: linear-gradient(135deg, #fcf0e4, #f8e4d0); color: #b06838; border-color: #eec0a0; }
+.mtb-orange .mtb-dot { background: #d08040; }
+.mtb-orange .mtb-urgency { background: #eec8a0; color: #b06838; }
+
+.mtb-red { background: linear-gradient(135deg, #fae8e8, #f8dcdc); color: #b05858; border-color: #e8b0b0; }
+.mtb-red .mtb-dot { background: #d46868; }
+.mtb-red .mtb-urgency { background: #eec4c4; color: #b05858; }
+
+.mtb-done { background: linear-gradient(135deg, #f6ecf0, #f2e6ea); color: #b05878; border-color: #e8d0d8; opacity: 0.65; }
+.mini-task-bubble.bubble-dragging { z-index: 10; box-shadow: 0 8px 32px rgba(80,60,40,0.25); cursor: grabbing; }
+.mtb-done .mtb-dot { background: #d08898; }
+.mtb-done .mtb-urgency { background: #f0d4dc; color: #b05878; }
+
+.mtb-none { background: linear-gradient(135deg, #f6f2ec, #f0ece4); color: #b4a898; border-color: #e0d8d0; }
+.mtb-none .mtb-dot { background: #c4b8a8; }
+.mtb-none .mtb-urgency { background: #e4dcd4; color: #b4a898; }
+
+/* Done list — sunk to bottom */
+#plant-done-list {
+  position: absolute;
+  bottom: 10px; left: 16px;
+  z-index: 4;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  max-width: 200px;
+}
+
+.plant-done-item {
+  font-size: 9px; color: var(--text-muted);
+  text-decoration: line-through;
+  pointer-events: auto; cursor: pointer;
+  transition: color var(--duration-fast);
+  padding: 1px 6px;
+  border-radius: var(--radius-xs);
+  background: rgba(200,180,160,0.08);
+}
+
+.plant-done-item:hover { color: var(--accent-pink); }
+
+/* ── Empty State: Seed Orb ── */
+#seed-orb, .seed-orb {
+  position: absolute; top: 38%; left: 50%; transform: translate(-50%, -50%);
+  width: 28px; height: 28px; z-index: 12; pointer-events: none;
+  opacity: 0; transition: opacity 0.5s ease;
+}
+#seed-orb.visible, .seed-orb.visible { opacity: 1; }
+
+.seed-core {
+  position: absolute; inset: 6px;
+  background: radial-gradient(circle, #f5d76e 0%, #e8a840 60%, #c88040 100%);
+  border-radius: 50%;
+  box-shadow: 0 0 16px rgba(200,160,60,0.5), 0 0 32px rgba(200,160,60,0.2);
+  animation: seedBob 2.5s ease-in-out infinite;
+}
+@keyframes seedBob {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-6px); }
+}
+
+.seed-ring {
+  position: absolute; inset: 0;
+  border: 1.5px solid rgba(200,160,60,0.4);
+  border-radius: 50%;
+  animation: seedRing 2.5s ease-in-out infinite;
+}
+@keyframes seedRing {
+  0%,100% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.8); opacity: 0; }
+}
+
+/* Pot glow — empty state only */
+#plant-pot-wrap.pot-empty {
+  filter: drop-shadow(0 4px 16px rgba(60,40,20,0.10)) drop-shadow(0 0 14px rgba(200,160,60,0.12));
+  animation: potSway 5s ease-in-out infinite, potBreathe 3s ease-in-out infinite;
+}
+@keyframes potBreathe {
+  0%,100% { filter: drop-shadow(0 4px 16px rgba(60,40,20,0.10)) drop-shadow(0 0 10px rgba(200,160,60,0.08)); }
+  50% { filter: drop-shadow(0 4px 16px rgba(60,40,20,0.10)) drop-shadow(0 0 22px rgba(200,160,60,0.22)); }
+}
+
+/* Seed sparkles */
+#seed-sparkles {
+  position: absolute; inset: 0; pointer-events: none; z-index: 11;
+}
+.seed-sparkle {
+  position: absolute;
+  width: 2px; height: 2px;
+  background: #e8c860;
+  border-radius: 50%;
+  box-shadow: 0 0 4px rgba(200,160,60,0.6);
+  animation: sparkleRise 2s ease-out forwards;
+}
+@keyframes sparkleRise {
+  0%   { transform: translateY(0) scale(0); opacity: 0; }
+  20%  { transform: translateY(-10px) scale(1.5); opacity: 1; }
+  100% { transform: translateY(-50px) scale(0); opacity: 0; }
+}
+
+/* Empty state guide — breathing text (above bubbles) */
+.empty-state-hint {
+  position: absolute; top: 45%; left: 50%; transform: translate(-50%, -50%);
+  font-size: 13px; color: var(--text-secondary);
+  pointer-events: none; z-index: 20;
+  text-align: center;
+  background: rgba(252,245,238,0.85);
+  backdrop-filter: blur(8px);
+  padding: 6px 14px; border-radius: 9999px;
+  opacity: 0; transition: opacity 0.6s ease;
+}
+.empty-state-hint.visible {
+  opacity: 0.65;
+  animation: hintBreathe 3s ease-in-out infinite;
+}
+@keyframes hintBreathe {
+  0%,100% { opacity: 0.3; }
+  50% { opacity: 0.6; }
+}
+
+/* Add button attention pulse — empty state */
+.add-btn.pulse-attention {
+  border-color: #d4945a !important;
+  box-shadow: 0 0 14px rgba(200,160,60,0.2) !important;
+  animation: btnPulse 2s ease-in-out infinite;
+}
+@keyframes btnPulse {
+  0%,100% { box-shadow: 0 0 6px rgba(200,160,60,0.15); }
+  50% { box-shadow: 0 0 24px rgba(200,160,60,0.35), 0 0 40px rgba(200,160,60,0.1); }
+}
+
+/* ===== Nano Mode — Floating Flower ===== */
+#nano-view {
+  position: absolute; inset: 0;
+  background: transparent;
+  pointer-events: auto;
+  z-index: 1;
+}
+#nano-view.hidden { display: none; }
+
+#nano-flower {
+  position: absolute;
+  right: 0; top: 50%;
+  transform: translateY(-50%);
+  width: 42px; height: 54px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.3s var(--ease-spring);
+  filter: drop-shadow(0 2px 6px rgba(60,40,20,0.20));
+}
+#nano-flower:active { cursor: grabbing; }
+#nano-flower:hover { transform: translateY(-50%) scale(1.08); }
+#nano-flower svg { display: block; }
+
+/* 专注模式花朵 hover */
+#nano-view.focus-active #nano-flower:hover {
+  transform: translateY(-50%) scale(1.15);
+}
+
+/* Petal breath animation */
+#nanoPetalGroup {
+  transform-origin: 21px 8px;
+  animation: nanoBreathe 3.5s ease-in-out infinite;
+}
+@keyframes nanoBreathe {
+  0%, 100% { transform: translate(21px,8px) scale(1); }
+  50% { transform: translate(21px,8px) scale(1.06); }
+}
+
+#nano-status-dot {
+  position: absolute;
+  bottom: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  border: 1px solid rgba(255,255,255,0.3);
+  transition: all 0.4s var(--ease-out);
+}
+.dot-bloom { background: #7abf5a; box-shadow: var(--shadow-glow-green); }
+.dot-bud { background: var(--flower-pink); box-shadow: 0 0 6px rgba(237,176,192,0.4); }
+.dot-wilt { background: var(--leaf-wilt); box-shadow: none; }
+
+/* ===== Nano Hover Preview ===== */
+#nano-hover-preview {
+  position: absolute;
+  right: 56px; top: 50%;
+  transform: translateY(-50%);
+  width: 185px;
+  background: var(--panel-bg-solid);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  padding: 14px 16px;
+  opacity: 0;
+  transform: translateY(-50%) scale(0.92) translateX(-6px);
+  transition: all 0.25s var(--ease-spring);
+  pointer-events: none;
+  border: 1px solid rgba(230, 221, 210, 0.3);
+}
+#nano-hover-preview.visible {
+  opacity: 1;
+  transform: translateY(-50%) scale(1) translateX(0);
+  pointer-events: auto;
+}
+
+.nano-hover-header {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 10px;
+}
+.nano-hover-day { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+.nano-hover-week { font-size: 10px; color: var(--text-secondary); }
+
+.nano-hover-progress {
+  height: 3px; background: rgba(180,160,140,0.15); border-radius: var(--radius-full);
+  margin-bottom: 12px; overflow: hidden;
+}
+.nano-hover-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent-green), #6aac5a);
+  border-radius: var(--radius-full);
+  transition: width var(--duration-slow);
+}
+
+.nano-hover-stats {
+  display: flex; gap: 8px; margin-bottom: 10px;
+}
+.nano-hover-stat { text-align: center; flex: 1; padding: 6px 0;
+  border-radius: var(--radius-xs);
+  background: rgba(200,180,160,0.06);
+}
+.nano-hover-stat-num {
+  font-size: 16px; font-weight: 800; display: block; line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+.nano-hover-stat-label { font-size: 8px; color: var(--text-secondary); display: block; margin-top: 1px; }
+.stat-urgent .nano-hover-stat-num { color: var(--urgent-red); }
+.stat-done .nano-hover-stat-num { color: var(--accent-green); }
+.stat-total .nano-hover-stat-num { color: var(--text-primary); }
+
+.nano-hover-tasks {
+  border-top: 1px solid var(--border-light); padding-top: 8px;
+  display: flex; flex-direction: column; gap: 5px;
+  max-height: 80px; overflow-y: auto;
+}
+.nano-hover-task {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 10px; padding: 3px 6px;
+  border-radius: var(--radius-xs);
+  transition: background var(--duration-fast);
+}
+.nano-hover-task:hover { background: var(--accent-soft); }
+.nano-hover-task .nht-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+}
+.nano-hover-task .nht-text {
+  flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.nano-hover-task.nht-done { opacity: 0.5; }
+
+/* ===== Nano Context Menu ===== */
+#nano-context-menu {
+  position: absolute;
+  right: 2px; top: 58px;
+  background: var(--panel-bg-solid);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-lg);
+  padding: 4px;
+  min-width: 140px;
+  opacity: 0;
+  transform: scale(0.92) translateY(-4px);
+  transition: all var(--duration-fast) var(--ease-spring);
+  pointer-events: none;
+  z-index: 20;
+  border: 1px solid rgba(230, 221, 210, 0.3);
+}
+#nano-context-menu.visible {
+  opacity: 1;
+  transform: scale(1) translateY(0);
+  pointer-events: auto;
+}
+/* 专注模式：菜单从花上方弹出 */
+#nano-view.focus-active #nano-context-menu {
+  top: auto; bottom: 6px;
+  transform-origin: bottom right;
+}
+.nano-ctx-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  font-size: 10px;
+  color: var(--text-primary);
+  border-radius: var(--radius-xs);
+  cursor: pointer;
+  transition: background var(--duration-fast);
+}
+.nano-ctx-item:hover { background: var(--accent-soft); }
+.nano-ctx-item:active { background: var(--accent-warm); }
+.nano-ctx-icon { font-size: 11px; width: 16px; text-align: center; }
+.nano-ctx-divider { height: 1px; background: var(--border-light); margin: 4px 8px; }
+.nano-ctx-exit { color: var(--danger); }
+.nano-ctx-exit:hover { background: var(--danger-soft); }
+/* ===== Full View — The Complete Interface ===== */
+#full-view {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100vw;
+  background: linear-gradient(170deg, var(--bg) 0%, var(--bg-end) 100%);
+}
+
+#full-view.hidden { display: none; }
+
+/* Title bar — ceramic rim */
+#titlebar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 38px;
+  padding: 0 10px;
+  background: linear-gradient(180deg, rgba(255,252,248,0.6) 0%, transparent 100%);
+  flex-shrink: 0;
+  border-radius: var(--radius-xl) var(--radius-xl) 0 0;
+  cursor: grab;
+}
+
+#titlebar-left {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+#titlebar-quick-btns {
+  display: flex; align-items: center; gap: 2px; margin-left: 8px;
+}
+#titlebar-quick-btns button {
+  border: none; background: transparent; color: var(--text-secondary);
+  font-size: 11px; cursor: pointer; padding: 2px 4px;
+  border-radius: 6px; transition: all 0.15s;
+}
+#titlebar-quick-btns button:hover { background: rgba(0,0,0,0.04); color: var(--text-primary); }
+
+#titlebar-left #status-emoji { font-size: 14px; }
+#titlebar-left #status-text strong { font-weight: 700; }
+
+#titlebar-center {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  font-size: 12px;
+}
+
+#titlebar-center #status-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--text-secondary);
+}
+
+/* Window controls — minimalist */
+#window-controls {
+  display: flex;
+  gap: 2px;
+}
+
+#window-controls button {
+  width: 30px;
+  height: 26px;
+  border: none;
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 9px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all var(--duration-fast);
+  border-radius: var(--radius-xs);
+  opacity: 0.6;
+}
+
+#window-controls button:hover { 
+  opacity: 1;
+  background: var(--accent-soft);
+}
+#window-controls #btn-close:hover { background: var(--danger-soft); color: var(--danger); }
+#window-controls #btn-collapse:hover { background: var(--accent-soft); color: var(--accent-pink); }
+
+/* ===== Main content area ===== */
+#app {
+  display: flex;
+  flex: 1;
+  overflow: hidden;
+  gap: 0;
+  margin: 0 6px 6px;
+  background: var(--panel-bg-solid);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  border: 1px solid var(--border-light);
+}
+
+/* Panel divider — subtle, elegant */
+#panel-divider {
+  width: 1px;
+  cursor: col-resize;
+  background: var(--border-light);
+  position: relative;
+  flex-shrink: 0;
+  transition: background var(--duration-fast);
+  z-index: 5;
+}
+#panel-divider::before {
+  content: "";
+  position: absolute;
+  top: 50%; left: -3px;
+  width: 7px; height: 28px;
+  background: var(--border-light);
+  border-radius: var(--radius-full);
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: all var(--duration-fast);
+}
+#panel-divider:hover::before,
+#panel-divider.active::before {
+  opacity: 1;
+  background: var(--accent-pink);
+  width: 3px;
+  left: -1px;
+}
+
+/* ===== Left Panel ===== */
+#left-panel {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 200px;
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Top section: plant + petal ring */
+#full-top-section {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 2px 0 12px;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--border-light);
+  margin-bottom: 10px;
+}
+
+#plant-area-full {
+  display: flex; justify-content: center;
+  position: relative; flex-shrink: 0;
+  align-items: center;
+}
+
+#plant-svg-full { width: 160px; height: 190px; filter: drop-shadow(0 2px 8px rgba(60,40,20,0.08)); }
+
+/* Petal progress ring — refined */
+#petal-progress-ring {
+  position: relative;
+  width: 90px;
+  height: 90px;
+  flex-shrink: 0;
+}
+#petal-progress-ring svg { width: 100%; height: 100%; }
+
+.petal { 
+  transition: all var(--duration-slow) var(--ease-out); 
+  stroke: none;
+}
+.petal.past { fill: var(--accent-green); opacity: 0.8; }
+.petal.active { fill: var(--accent-yellow); opacity: 0.9; filter: brightness(1.05); }
+.petal.future { fill: #e6ddd2; opacity: 0.35; }
+
+#ring-center-text {
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%,-50%);
+  text-align: center;
+  pointer-events: none;
+}
+
+#ring-day-num {
+  display: block;
+  font-size: 20px;
+  font-weight: 800;
+  color: var(--urgent-green);
+  line-height: 1;
+  letter-spacing: -0.5px;
+}
+
+#ring-day-label {
+  display: block;
+  font-size: 8px;
+  color: var(--text-secondary);
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+  font-weight: 500;
+}
+
+/* Important section header */
+#section-header-important {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 0 12px 8px 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-primary);
+  flex-shrink: 0;
+}
+
+.section-icon { font-size: 12px; opacity: 0.7; }
+
+.count-badge {
+  margin-left: auto;
+  background: var(--accent-soft);
+  color: var(--text-secondary);
+  font-size: 10px;
+  font-weight: 600;
+  padding: 1px 8px;
+  border-radius: var(--radius-full);
+  min-width: 28px;
+  text-align: center;
+}
+
+/* Task lists */
+.task-list {
+  flex: 1;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 0 12px 8px 8px;
+  min-height: 60px;
+}
+
+.task-list::-webkit-scrollbar { width: 3px; }
+.task-list::-webkit-scrollbar-track { background: transparent; }
+.task-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-full); }
+
+/* ===== Task Cards — Elegant, minimal ===== */
+.task-card {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 10px 8px 3px;
+  background: linear-gradient(135deg, rgba(255,255,255,0.9), rgba(252,250,248,0.7));
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--border-light);
+  transition: all 0.25s var(--ease-spring);
+  cursor: default;
+  box-shadow: 0 1px 3px rgba(80,60,40,0.04);
+}
+.task-card.editing {
+  overflow: visible; align-items: flex-start; min-height: 72px;
+}
+
+@keyframes cardSlideIn {
+  from { opacity: 0; transform: translateX(10px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+.task-card:hover {
+  border-color: var(--accent-pink);
+  box-shadow: var(--shadow-sm);
+  transform: translateX(2px);
+}
+
+.task-card.completed {
+  opacity: 0.55;
+  border-color: var(--border-light);
+}
+.task-card.completed:hover { opacity: 0.7; }
+
+.task-card.urg-green { border-left: 3px solid var(--accent-green); }
+.task-card.urg-yellow { border-left: 3px solid var(--accent-yellow); }
+.task-card.urg-orange { border-left: 3px solid var(--urgent-orange); }
+.task-card.urg-red { border-left: 3px solid var(--urgent-red); }
+.task-card.urg-done { border-left: 3px solid var(--accent-pink); }
+
+.task-card.dragging {
+  opacity: 0.4;
+  box-shadow: var(--shadow-lg);
+  transform: scale(0.98) rotate(-1deg);
+}
+
+.task-card.drag-over {
+  border-color: var(--accent-pink);
+  box-shadow: 0 0 0 2px var(--accent-pink-soft);
+  transform: translateY(2px);
+}
+
+/* Leaf index on important cards */
+.leaf-index {
+  font-size: 12px; flex-shrink: 0; opacity: 0.45;
+  transition: opacity 0.3s;
+}
+.task-card.completed .leaf-index { opacity: 0.7; }
+
+/* Checkbox — custom circle */
+.task-checkbox {
+  width: 16px; height: 16px;
+  border-radius: 50%;
+  border: 2px solid var(--border);
+  flex-shrink: 0;
+  cursor: pointer;
+  transition: all var(--duration-fast) var(--ease-spring);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.task-checkbox:hover {
+  border-color: var(--accent-pink);
+  transform: scale(1.15);
+}
+
+.task-card.completed .task-checkbox {
+  background: var(--accent-pink);
+  border-color: var(--accent-pink);
+}
+
+.task-card.completed .task-checkbox::after {
+  content: "✓";
+  color: white;
+  font-size: 9px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* Title */
+.task-content { flex: 1; min-width: 0; }
+.task-title {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--text-primary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.task-card.completed .task-title {
+  text-decoration: line-through;
+  color: var(--text-secondary);
+}
+
+/* ===== Urgency Badge — 玻璃质感药丸徽章 ===== */
+.urgency-badge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+  letter-spacing: 0.4px;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: all var(--duration-fast) var(--ease-out);
+  margin-left: auto;
+}
+/* 紧迫度颜色 */
+.urgency-green {
+  background: linear-gradient(135deg, rgba(143,196,140,0.18), rgba(143,196,140,0.08));
+  color: #3a6a3a;
+  box-shadow: 0 0 0 1px rgba(143,196,140,0.25), 0 1px 3px rgba(90,138,90,0.12);
+}
+.urgency-yellow {
+  background: linear-gradient(135deg, rgba(237,196,138,0.20), rgba(237,196,138,0.08));
+  color: #7a5828;
+  box-shadow: 0 0 0 1px rgba(237,196,138,0.30), 0 1px 3px rgba(176,136,64,0.15);
+}
+.urgency-orange {
+  background: linear-gradient(135deg, rgba(208,128,64,0.20), rgba(208,128,64,0.08));
+  color: #8a4a20;
+  box-shadow: 0 0 0 1px rgba(208,128,64,0.30), 0 1px 3px rgba(208,128,64,0.15);
+}
+.urgency-red {
+  background: linear-gradient(135deg, rgba(212,104,104,0.22), rgba(212,104,104,0.10));
+  color: #8a3030;
+  box-shadow: 0 0 0 1px rgba(212,104,104,0.30), 0 1px 6px rgba(212,104,104,0.18);
+  animation: pulse-urgent 2s ease-in-out infinite;
+}
+@keyframes pulse-urgent {
+  0%,100% { box-shadow: 0 0 0 1px rgba(212,104,104,0.30), 0 1px 6px rgba(212,104,104,0.18); }
+  50% { box-shadow: 0 0 0 1px rgba(212,104,104,0.45), 0 2px 12px rgba(212,104,104,0.25); }
+}
+.urgency-done {
+  background: linear-gradient(135deg, rgba(224,122,143,0.14), rgba(224,122,143,0.06));
+  color: #9a5070;
+  box-shadow: 0 0 0 1px rgba(224,122,143,0.20);
+}
+.urgency-none {
+  background: linear-gradient(135deg, rgba(180,168,152,0.10), rgba(180,168,152,0.04));
+  color: var(--text-secondary);
+  box-shadow: 0 0 0 1px rgba(180,168,152,0.15);
+}
+
+/* ===== Priority Dot ===== */
+.task-prio-dot {
+  display: inline-block; width: 6px; height: 6px; border-radius: 50%;
+  margin-right: 4px; vertical-align: middle;
+}
+.prio-high { background: var(--urgent-red); box-shadow: 0 0 4px rgba(212,104,104,0.5); }
+.prio-medium { background: var(--accent-yellow); box-shadow: 0 0 4px rgba(237,196,138,0.4); }
+.prio-low { background: var(--text-muted); }
+
+/* Add button */
+.add-btn {
+  border: 1px dashed var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 8px;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  width: calc(100% - 20px);
+  text-align: center;
+  transition: all var(--duration-fast);
+  margin: 4px 12px 0 8px;
+  flex-shrink: 0;
+  margin-top: 4px;
+}
+
+.add-btn:hover { 
+  border-color: var(--accent-pink); 
+  color: var(--accent-pink); 
+  background: var(--accent-pink-soft);
+  border-style: solid;
+}
+
+/* Empty state */
+.empty-state {
+  color: var(--text-secondary);
+  font-size: 12px;
+  text-align: center;
+  padding: 24px 12px;
+  font-style: italic;
+  opacity: 0.6;
+}
+
+/* ===== Right Panel ===== */
+#right-panel {
+  flex: 1;
+  min-width: 140px;
+  display: flex;
+  flex-direction: column;
+  background: var(--panel-bg);
+  transition: all 0.3s var(--ease-out);
+  border-radius: 0 0 var(--radius-md) 0;
+  overflow: hidden;
+}
+#right-panel.collapsed {
+  flex: 0 0 auto;
+  min-width: 0;
+  background: transparent;
+}
+
+#right-toggle {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 12px 8px;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  flex-shrink: 0;
+  transition: color var(--duration-fast);
+  color: var(--text-primary);
+}
+#right-panel.collapsed #right-toggle {
+  flex-direction: column;
+  padding: 10px 5px;
+  gap: 3px;
+  font-size: 11px;
+}
+
+#right-toggle:hover { color: var(--accent-pink); }
+
+#right-toggle .section-icon { font-size: 12px; }
+#right-panel.collapsed .section-icon { display: none; }
+
+#todo-count { margin-left: 0; }
+
+#collapse-icon {
+  margin-left: auto;
+  font-size: 8px;
+  transition: transform var(--duration-normal);
+  color: var(--text-secondary);
+}
+#right-panel.collapsed #collapse-icon {
+  margin-left: 0;
+  transform: rotate(180deg);
+  font-size: 10px;
+}
+
+.collapsible-content {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  padding: 0 12px 12px;
+  overflow: hidden;
+  transition: opacity 0.2s;
+}
+
+#right-panel.collapsed .collapsible-content { display: none; }
+
+#priority-summary {
+  font-size: 10px;
+  color: var(--text-secondary);
+  padding: 2px 0 4px;
+  min-height: 18px;
+  display: flex;
+  gap: 8px;
+}
+/* ===== Particle Effects ===== */
+#particle-container {
+  position: fixed;
+  top: 0; left: 0;
+  width: 100%; height: 100%;
+  pointer-events: none;
+  z-index: 1000;
+}
+
+.particle {
+  position: absolute;
+  width: 5px; height: 5px;
+  border-radius: 50%;
+  pointer-events: none;
+  animation: particleBurst 0.9s var(--ease-out) forwards;
+}
+
+@keyframes particleBurst {
+  0% { opacity: 1; transform: translate(0,0) scale(1); }
+  100% { opacity: 0; transform: translate(var(--dx),var(--dy)) scale(0); }
+}
+
+/* ═══════════════════════════════════════════════════════
+   Onboarding — First-Run Experience
+   ═══════════════════════════════════════════════════════ */
+#onboarding-overlay {
+  position: fixed; inset: 0; z-index: 200;
+  background: rgba(252,245,238,0.92);
+  backdrop-filter: blur(16px);
+  display: flex; align-items: center; justify-content: center;
+  opacity: 1; transition: opacity 0.5s ease;
+}
+#onboarding-overlay.hidden { opacity: 0; pointer-events: none; }
+
+#onboarding-card {
+  text-align: center; max-width: 260px;
+  animation: obCardIn 0.6s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes obCardIn {
+  from { transform: translateY(20px) scale(0.9); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+#onboarding-plant {
+  font-size: 56px; margin-bottom: 16px;
+  animation: obPlantBounce 1s ease-in-out infinite;
+}
+@keyframes obPlantBounce {
+  0%,100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-8px) scale(1.08); }
+}
+
+#onboarding-title {
+  font-size: 18px; font-weight: 700; color: #4a3a2a;
+  margin-bottom: 8px; transition: all 0.4s ease;
+}
+#onboarding-desc {
+  font-size: 12px; color: #8a7a6a;
+  margin-bottom: 24px; line-height: 1.6;
+  transition: all 0.4s ease;
+}
+
+#onboarding-dots {
+  display: flex; justify-content: center; gap: 8px; margin-bottom: 20px;
+}
+#onboarding-dots span {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: rgba(140,120,100,0.2);
+  transition: all 0.4s ease;
+}
+#onboarding-dots span.active { background: #5aac40; box-shadow: 0 0 8px rgba(90,172,64,0.4); }
+
+#onboarding-next {
+  border: 1.5px solid #5aac40; background: transparent;
+  color: #3d8a28; font-size: 13px; font-weight: 600;
+  padding: 8px 32px; border-radius: 9999px; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.34,1.56,0.64,1);
+}
+#onboarding-next:hover {
+  background: #5aac40; color: #fff;
+  box-shadow: 0 0 20px rgba(90,172,64,0.3);
+}
+
+/* ═══════════════════════════════════════════════════════
+   Celebration Overlay — Full Bloom
+   ═══════════════════════════════════════════════════════ */
+#celebration-overlay {
+  position: fixed; inset: 0; z-index: 150;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.5s ease;
+  background: radial-gradient(ellipse at center, rgba(120,200,80,0.06) 0%, transparent 70%);
+}
+#celebration-overlay.active {
+  opacity: 1; pointer-events: auto;
+  animation: celEnter 0.6s cubic-bezier(0.34,1.56,0.64,1);
+}
+@keyframes celEnter {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+#celebration-flower {
+  font-size: 80px;
+  animation: celBounce 0.8s cubic-bezier(0.34,1.56,0.64,1) forwards,
+             celFloat 2s ease-in-out 0.8s infinite;
+}
+@keyframes celBounce {
+  0% { transform: scale(0) rotate(-30deg); }
+  60% { transform: scale(1.3) rotate(5deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+@keyframes celFloat {
+  0%,100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+
+#celebration-text {
+  font-size: 24px; font-weight: 700; color: #4a3a2a;
+  margin-top: 16px;
+  animation: celTextIn 0.6s 0.3s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+@keyframes celTextIn {
+  from { transform: translateY(12px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+#celebration-sub {
+  font-size: 13px; color: #8a7a6a; margin-top: 6px;
+  animation: celTextIn 0.6s 0.5s cubic-bezier(0.34,1.56,0.64,1) both;
+}
+
+#celebration-confetti {
+  position: absolute; inset: 0; pointer-events: none; overflow: hidden;
+}
+.confetti-piece {
+  position: absolute; top: -10px;
+  width: 8px; height: 8px; border-radius: 2px;
+  animation: confettiFall 3s ease-in forwards;
+}
+@keyframes confettiFall {
+  0%   { transform: translateY(0) rotate(0deg); opacity: 1; }
+  100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+}
+
+/* ═══════════════════════════════════════════════════════
+   Focus Timer — Nano HUD + Task Entry Points
+   ═══════════════════════════════════════════════════════ */
+
+/* ── Nano Focus Info Strip ── */
+#nano-focus-info {
+  position: absolute; left: 8px; right: 48px; top: 50%; transform: translateY(-50%);
+  display: flex; align-items: center; gap: 8px;
+  padding: 4px 10px;
+  background: rgba(90,172,64,0.08);
+  border: 1px solid rgba(90,172,64,0.18);
+  border-radius: 9999px;
+  opacity: 0; pointer-events: none;
+  transition: opacity 0.3s ease;
+  white-space: nowrap;
+  z-index: 5;
+  overflow: hidden;
+}
+#nano-focus-info.active {
+  opacity: 1; pointer-events: auto;
+  animation: focusBreath 3s ease-in-out infinite;
+}
+#nano-focus-info.active::after {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(105deg,
+    transparent 35%,
+    rgba(255,255,255,0.06) 42%,
+    rgba(255,255,255,0.12) 45%,
+    rgba(255,255,255,0.06) 48%,
+    transparent 55%
+  );
+  animation: focusShimmer 4s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes focusBreath {
+  0%, 100% {
+    border-color: rgba(90,172,64,0.18);
+    box-shadow: 0 0 6px rgba(90,172,64,0.05);
+  }
+  50% {
+    border-color: rgba(90,172,64,0.38);
+    box-shadow: 0 0 16px rgba(90,172,64,0.1), 0 0 28px rgba(90,172,64,0.04);
+  }
+}
+@keyframes focusShimmer {
+  0%, 100% { transform: translateX(-100%); }
+  50% { transform: translateX(100%); }
+}
+
+.focus-icon {
+  font-size: 12px; flex-shrink: 0;
+  animation: focusIconSpin 6s linear infinite;
+}
+@keyframes focusIconSpin {
+  0%, 85%, 100% { transform: scale(1); }
+  88% { transform: scale(1.25); }
+}
+
+.focus-task-name {
+  font-size: 11px; font-weight: 600; color: #4a3a2a;
+  flex: 1; overflow: hidden; text-overflow: ellipsis;
+  white-space: nowrap; min-width: 0;
+}
+
+.focus-timer {
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 13px; font-weight: 700; color: #3d8a28;
+  min-width: 48px; text-align: right;
+  flex-shrink: 0;
+  animation: timerPulse 2s ease-in-out infinite;
+}
+@keyframes timerPulse {
+  0%, 100% { opacity: 1; text-shadow: 0 0 4px rgba(61,138,40,0.25); }
+  50% { opacity: 0.85; text-shadow: 0 0 10px rgba(61,138,40,0.45); }
+}
+
+/* Focus icon clickable (stop focus) */
+#focus-icon-click {
+  cursor: pointer; transition: all 0.2s ease;
+}
+#focus-icon-click:hover {
+  transform: scale(1.3);
+  filter: drop-shadow(0 0 6px rgba(212,112,112,0.5));
+}
+
+/* ── 25min Cycle Progress Fill ── */
+#nano-focus-info.active::before {
+  content: '';
+  position: absolute; inset: 0; border-radius: inherit;
+  background: linear-gradient(90deg, rgba(90,172,64,0.12), rgba(90,172,64,0.22));
+  transform-origin: left center;
+  transform: scaleX(var(--focus-progress, 0));
+  transition: transform 0.8s linear;
+  pointer-events: none;
+  z-index: -1;
+}
+#nano-focus-info.focus-warning {
+  animation: focusBreathFast 1.5s ease-in-out infinite !important;
+  border-color: rgba(200,140,60,0.4) !important;
+}
+@keyframes focusBreathFast {
+  0%, 100% {
+    border-color: rgba(200,140,60,0.32);
+    box-shadow: 0 0 8px rgba(200,140,60,0.08);
+  }
+  50% {
+    border-color: rgba(200,140,60,0.55);
+    box-shadow: 0 0 20px rgba(200,140,60,0.15), 0 0 32px rgba(200,140,60,0.05);
+  }
+}
+
+/* ── Nano Focus Dot ── */
+.dot-focus {
+  background: #4ade80 !important;
+  box-shadow: 0 0 12px rgba(74,222,128,0.5) !important;
+  animation: focusPulse 1.2s ease-in-out infinite;
+}
+@keyframes focusPulse {
+  0%,100% { box-shadow: 0 0 6px rgba(74,222,128,0.4); transform: scale(1); }
+  50% { box-shadow: 0 0 18px rgba(74,222,128,0.6), 0 0 30px rgba(74,222,128,0.2); transform: scale(1.3); }
+}
+
+/* ── Mini Bubble ⏱ Button ── */
+.mtb-focus-btn {
+  flex-shrink: 0; width: 20px; height: 20px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; border-radius: 50%;
+  cursor: pointer; opacity: 0.35;
+  transition: all 0.2s ease;
+  background: rgba(90,172,64,0.06);
+  margin-left: 2px;
+}
+.mini-task-bubble:hover .mtb-focus-btn { opacity: 1; }
+.mtb-focus-btn:hover {
+  background: #5aac40;
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(90,172,64,0.3);
+}
+
+.bubble-focusing {
+  border-color: rgba(90,172,64,0.4) !important;
+  box-shadow: 0 0 12px rgba(90,172,64,0.12) !important;
+}
+.bubble-focusing .mtb-focus-btn {
+  opacity: 1; background: #5aac40;
+  animation: focusPulse 1.2s ease-in-out infinite;
+}
+
+/* ── Full Card ⏱ Button ── */
+.card-focus-btn {
+  flex-shrink: 0; width: 22px; height: 22px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 12px; border-radius: 50%;
+  cursor: pointer; opacity: 0.3;
+  transition: all 0.2s ease;
+  background: rgba(90,172,64,0.04);
+}
+.task-card:hover .card-focus-btn { opacity: 1; }
+.card-focus-btn:hover {
+  background: #5aac40;
+  transform: scale(1.2);
+  box-shadow: 0 0 12px rgba(90,172,64,0.3);
+}
+
+.focus-time-badge {
+  font-family: 'Cascadia Code', 'Fira Code', 'Consolas', monospace;
+  font-size: 9px; font-weight: 600;
+  color: #3d8a28; flex-shrink: 0;
+  background: rgba(90,172,64,0.06);
+  padding: 1px 6px; border-radius: 9999px;
+}
+
+.task-card.task-focusing {
+  border-color: rgba(90,172,64,0.35) !important;
+  box-shadow: 0 0 16px rgba(90,172,64,0.1), inset 0 0 16px rgba(90,172,64,0.03) !important;
+}
+.task-card.task-focusing .card-focus-btn {
+  opacity: 1; background: #5aac40;
+  animation: focusPulse 1.2s ease-in-out infinite;
+}
+
+/* ═══════════════════════════════════════════════════════
+   Spring Physics — Premium Micro-Interactions
+   ═══════════════════════════════════════════════════════ */
+.task-card, .mini-task-bubble, .add-btn, #window-controls button,
+#btn-nano-mini, #btn-theme-mini, #btn-theme-full {
+  transition: transform 0.25s cubic-bezier(0.34,1.56,0.64,1),
+              box-shadow 0.25s cubic-bezier(0.34,1.56,0.64,1),
+              border-color 0.25s cubic-bezier(0.34,1.56,0.64,1),
+              background 0.25s cubic-bezier(0.34,1.56,0.64,1);
+}
+
+/* ===== Plant Animations ===== */
+.plant-stem {
+  transform-origin: 50% 90%;
+  transition: transform 1.5s cubic-bezier(0.34,1.56,0.64,1);
+  animation: plantSway 5s ease-in-out infinite;
+}
+
+/* Growth stages (light theme) */
+.growth-sprout { --growth: 0.18; }
+.growth-seed  { --growth: 0.40; }
+.growth-grow  { --growth: 0.62; }
+.growth-mature{ --growth: 0.82; }
+.growth-pre   { --growth: 0.95; }
+.growth-bloom { --growth: 1.00; }
+
+.growth-bloom .stem-body { stroke: #3a7c2f !important; }
+
+@keyframes plantSway {
+  0%, 100% { transform: rotate(-1.2deg) scaleY(var(--growth, 0.15)); }
+  50% { transform: rotate(1.2deg) scaleY(var(--growth, 0.15)); }
+}
+
+/* Flower breathing */
+.main-flower {
+  animation: flowerBreathe 3.5s ease-in-out infinite;
+  transform-origin: center;
+}
+
+@keyframes flowerBreathe {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.06); }
+}
+
+/* Leaf transitions */
+.plant-leaf {
+  transition: all 0.7s var(--ease-out);
+}
+
+.plant-leaf.wilting .leaf-shape {
+  fill: var(--leaf-wilt) !important;
+}
+
+.plant-leaf.dying .leaf-shape {
+  fill: var(--leaf-dead) !important;
+}
+
+.plant-leaf.dead .leaf-shape {
+  fill: var(--leaf-dead-dark) !important;
+}
+
+/* Bloom animation */
+.flower-bud.blooming {
+  animation: bloomAnim 0.7s var(--ease-spring) forwards;
+}
+
+@keyframes bloomAnim {
+  0% { transform: scale(0); opacity: 0; }
+  50% { transform: scale(1.3); opacity: 0.9; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* Leaf drop */
+.leaf-drop {
+  animation: leafDrop 1.4s ease-in forwards;
+  transform-origin: 0 100%;
+}
+
+@keyframes leafDrop {
+  0% { transform: rotate(0deg) translateY(0); opacity: 1; }
+  40% { transform: rotate(20deg) translateY(15px); opacity: 0.8; }
+  100% { transform: rotate(-35deg) translateY(50px); opacity: 0; }
+}
+
+/* Vine sway */
+.vine {
+  transform-origin: top;
+  animation: vineSway 6s ease-in-out infinite;
+}
+
+@keyframes vineSway {
+  0%, 100% { transform: rotate(-1.5deg); }
+  50% { transform: rotate(1.5deg); }
+}
+
+/* Stem body transition */
+.plant-stem .stem-body { transition: stroke 1.2s ease; }
+
+/* Full bloom celebration */
+@keyframes flowerCelebrate {
+  0%   { transform: scale(0); filter: brightness(1.8); }
+  60%  { transform: scale(1.25); }
+  100% { transform: scale(1); filter: brightness(1); }
+}
+.growth-bloom .main-flower {
+  animation: flowerBreathe 2.5s ease-in-out infinite, flowerCelebrate 0.8s ease-out;
+}
+
+/* ── Water Droplet ── */
+#water-container, .water-container { position: absolute; inset: 0; pointer-events: none; z-index: 10; }
+.water-drop {
+  position: absolute; width: 5px; height: 8px;
+  background: linear-gradient(180deg, rgba(96,165,250,0.85), rgba(74,180,100,0.65));
+  border-radius: 50% 50% 50% 50% / 30% 30% 70% 70%;
+  animation: waterDrop 0.8s ease-in forwards;
+  pointer-events: none;
+}
+@keyframes waterDrop {
+  0%   { transform: translateY(0) scale(0.5); opacity: 1; }
+  40%  { transform: translateY(25px) scale(1.2); opacity: 0.8; }
+  70%  { transform: translateY(45px) scale(0.6); opacity: 0.4; }
+  100% { transform: translateY(55px) scale(0.2); opacity: 0; }
+}
+.water-splash {
+  position: absolute; width: 16px; height: 16px;
+  border: 2px solid rgba(74,180,100,0.5); border-radius: 50%;
+  animation: waterSplash 0.6s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes waterSplash {
+  0%   { transform: scale(0.3); opacity: 1; }
+  100% { transform: scale(2); opacity: 0; }
+}
+
+/* ── Rain Effect ── */
+#rain-container, .rain-container { position: absolute; inset: 0; pointer-events: none; z-index: 9; overflow: hidden; }
+.rain-drop {
+  position: absolute; width: 1.5px;
+  background: linear-gradient(180deg, transparent, rgba(140,130,120,0.4));
+  animation: rainDrop 1.2s linear forwards;
+  pointer-events: none;
+}
+@keyframes rainDrop {
+  0%   { transform: translateY(-10px); opacity: 0; }
+  20%  { transform: translateY(10px); opacity: 0.6; }
+  100% { transform: translateY(120px); opacity: 0; }
+}
+
+/* ── Morning Growth ── */
+.morning-grow {
+  animation: morningGrow 1.2s cubic-bezier(0.34,1.56,0.64,1) forwards;
+}
+@keyframes morningGrow {
+  0%   { transform: scaleY(0.05); opacity: 0.3; filter: brightness(2); }
+  60%  { transform: scaleY(1.05); opacity: 1; filter: brightness(1.1); }
+  80%  { transform: scaleY(0.95); }
+  100% { transform: scaleY(1); opacity: 1; filter: brightness(1); }
+}
+
+/* ── Plant Hover Tilt ── */
+#plant-svg-mini:hover .plant-stem,
+#plant-svg-full:hover .plant-stem {
+  animation: plantHoverTilt 0.35s ease forwards;
+}
+@keyframes plantHoverTilt {
+  0%   { transform: rotate(0deg) scaleY(var(--growth,1)); }
+  100% { transform: rotate(3deg) scaleY(var(--growth,1)); }
+}
+
+/* ── Idle Animations ── */
+.leaf-twitch { animation: leafTwitch 0.4s ease-out; }
+@keyframes leafTwitch {
+  0%   { transform: rotate(0deg); }
+  25%  { transform: rotate(4deg); }
+  50%  { transform: rotate(-3deg); }
+  75%  { transform: rotate(2deg); }
+  100% { transform: rotate(0deg); }
+}
+.plant-sparkle {
+  position: absolute; pointer-events: none; width: 4px; height: 4px;
+  background: #6abf4b; border-radius: 50%;
+  box-shadow: 0 0 8px rgba(106,191,75,0.6);
+  animation: sparkleFloat 1.5s ease-out forwards; z-index: 11;
+}
+@keyframes sparkleFloat {
+  0%   { transform: translateY(0) scale(0); opacity: 0; }
+  30%  { transform: translateY(-8px) scale(1.5); opacity: 1; }
+  100% { transform: translateY(-30px) scale(0); opacity: 0; }
+}
+.petal-fall {
+  position: absolute; pointer-events: none; z-index: 11;
+  animation: petalFall 3s ease-in forwards;
+}
+@keyframes petalFall {
+  0%   { transform: translateY(0) rotate(0deg) scale(1); opacity: 0.9; }
+  30%  { transform: translateY(10px) rotate(45deg) scale(0.9); opacity: 0.7; }
+  100% { transform: translateY(60px) rotate(180deg) scale(0.4); opacity: 0; }
+}
+
+/* ── Nano Petal Transitions ── */
+.nano-petal { transition: opacity 0.6s ease, transform 0.6s ease, fill 0.8s ease; }
+.nano-petal.wilted { opacity: 0.35 !important; transform: scale(0.65); fill: #d4b880; }
+
+/* ── Plant Speech Bubble ── */
+#plant-speech, .plant-speech-bubble {
+  position: absolute; z-index: 12;
+  background: rgba(252,245,238,0.95);
+  backdrop-filter: blur(16px);
+  border: 1px solid rgba(180,160,140,0.3);
+  border-radius: 14px; padding: 6px 12px;
+  font-size: 10px; color: #5a4a3a;
+  white-space: nowrap; pointer-events: none;
+  opacity: 0; transform: translateY(4px);
+  transition: opacity 0.25s ease, transform 0.25s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.1);
+}
+#plant-speech.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== View transitions ===== */
+.view-enter {
+  animation: viewFadeIn 0.3s var(--ease-out);
+}
+
+@keyframes viewFadeIn {
+  from { opacity: 0; transform: scale(0.95); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.view-exit {
+  animation: viewFadeOut 0.2s ease-in;
+}
+
+@keyframes viewFadeOut {
+  from { opacity: 1; transform: scale(1); }
+  to { opacity: 0; transform: scale(0.95); }
+}
+
+/* ===== Celebration ===== */
+@keyframes celebrateShake {
+  0%, 100% { transform: scale(1); }
+  20% { transform: scale(1.06) rotate(-1.5deg); }
+  40% { transform: scale(1.06) rotate(1.5deg); }
+  60% { transform: scale(1.03) rotate(-0.5deg); }
+  80% { transform: scale(1.03) rotate(0.5deg); }
+}
+
+.celebrate { animation: celebrateShake 0.5s var(--ease-out); }
+
+/* ===== Edit Mode ===== */
+.task-edit-input {
+  border: none;
+  border-bottom: 1.5px solid var(--accent-pink);
+  background: transparent;
+  font-family: var(--font);
+  font-size: 12px;
+  color: var(--text-primary);
+  outline: none;
+  width: 100%;
+  padding: 2px 0;
+}
+
+.task-delete {
+  width: 18px; height: 18px;
+  border: none; background: transparent;
+  color: var(--text-muted); font-size: 12px;
+  cursor: pointer; border-radius: 50%;
+  opacity: 0.25; transition: all var(--duration-fast);
+  flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+
+.task-card:hover .task-delete { opacity: 1; }
+.task-delete:hover { background: var(--danger-soft); color: var(--danger); }
+
+/* ===== Status Emoji ===== */
+#status-emoji { font-size: 13px; }
+/* ===== ID-specific styles (referenced by JS / HTML) ===== */
+#plantProgressFill { height: 100%; }
+#nanoFlowerSvg { display: block; }
+#nanoHoverDay { font-size: 13px; font-weight: 700; color: var(--text-primary); }
+#nanoHoverWeek { font-size: 10px; color: var(--text-secondary); }
+#nanoHoverProgressFill { height: 100%; }
+#nanoStatUrgent, #nanoStatDone, #nanoStatTotal { font-size: 16px; font-weight: 800; }
+#nanoHoverTasks { max-height: 150px; overflow-y: auto; }
+#btn-minimize { }
+#week-progress { display: flex; gap: 3px; justify-content: center; padding: 4px 0 8px; flex-shrink: 0; }
+#important-count { margin-left: auto; }
+#important-list { flex: 1; overflow-y: auto; }
+#add-important-btn { margin: 0 12px 0 8px; width: auto; }
+#todo-container { flex: 1; display: flex; flex-direction: column; }
+#todo-list { flex: 1; overflow-y: auto; }
+#add-todo-btn { }
+
+/* Day labels (week-progress children) */
+.day-label {
+  width: 28px; height: 20px;
+  border-radius: var(--radius-full);
+  background: var(--accent-soft);
+  font-size: 10px;
+  color: var(--text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 500;
+  transition: all var(--duration-normal);
+}
+.day-label.active { background: var(--accent-green); color: white; }
+.day-label.past { background: var(--accent-green-soft); color: var(--accent-green); }
+/* ===== Enhanced SVG styles for Nano flower ===== */
+#nanoFlowerSvg .nano-petal {
+  transition: all 0.5s var(--ease-out);
+}
+#nanoFlowerSvg .nano-petal.bloom { fill: #f0b8c8; }
+#nanoFlowerSvg .nano-petal.bud { fill: #f5d0d8; opacity: 0.7; }
+#nanoFlowerSvg .nano-petal.wilt { fill: #d4b880; opacity: 0.5; }
+
+/* Nano leaf lines */
+#nanoFlowerSvg .nano-stem { stroke: #5a9c4f; stroke-width: 1.5; stroke-linecap: round; }
+#nanoFlowerSvg .nano-leaf { fill: #8fc48c; opacity: 0.8; }
+/* Priority indicator for todo items */
+.todo-prio { font-size: 10px; color: var(--text-secondary); flex-shrink: 0; white-space: nowrap; margin-left: 4px; }

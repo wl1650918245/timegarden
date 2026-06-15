@@ -1,0 +1,25 @@
+# Dependencies
+node_modules/
+
+# Runtime data
+user-data/
+
+# Electron error logs
+electron-err*.log
+
+# Build output
+dist/
+out/
+
+# System
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# IDE
+.vscode/
+.idea/
+
+# Backup / temp
+*.bak
+*.tmp

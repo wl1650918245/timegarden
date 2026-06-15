@@ -1,0 +1,27 @@
+{
+  "name": "weekly-planner",
+  "version": "1.0.0",
+  "description": "桌面事项管理工具 - 盆栽治愈系周计划",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron . --no-sandbox",
+    "build": "electron-builder"
+  },
+  "build": {
+    "appId": "com.weekly-planner.app",
+    "productName": "周计划盆栽",
+    "win": {
+      "target": "nsis",
+      "icon": "build/icon.ico"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": false,
+      "runAfterFinish": true,
+      "createDesktopShortcut": true
+    }
+  },
+  "devDependencies": {
+    "electron": "^35.7.5"
+  }
+}
