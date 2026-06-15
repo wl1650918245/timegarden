@@ -1,92 +1,79 @@
 # 🌸 TimeGarden — Desktop Weekly Planner
 
-> A minimalist desktop companion that turns your weekly priorities into a living plant.
+> A living plant on your desktop that grows with your weekly progress.
 
 [中文](README_CN.md) | English
 
+<p align="center">
+  <img src="screenshots/dark-mini.png" width="360" alt="Mini view — Dark theme" />
+  <img src="screenshots/dark-full.png" width="360" alt="Full view — Dark theme" />
+</p>
+
 ---
 
-## What is this?
+## ✨ What is this?
 
-An Electron desktop app that visualizes your weekly tasks as a plant. Complete tasks → flowers bloom. Miss deadlines → leaves wilt. Built-in focus timer, floating flower mode, and dual light/dark themes.
+TimeGarden turns your weekly priorities into a desktop plant. Complete tasks — leaves bloom into flowers. Miss deadlines — leaves wilt. Built-in focus timer, three view modes, and dual light/dark themes.
 
-## Three Views, One Plant
+<p align="center">
+  <img src="screenshots/nano-focus.png" height="60" alt="Nano focus mode" />
+  <br/><sub>Nano focus mode — 25min cycle with progress bar</sub>
+</p>
 
-| View | Size | Purpose |
-|------|------|---------|
-| **Nano** (Floating Flower) | 48×68 | A tiny flower at your screen edge. Hover for weekly stats. Doubles as a focus timer HUD |
-| **Mini** (Flowerpot) | 360×310 (resizable) | Default view. Ceramic pot + draggable task bubbles floating around the plant |
-| **Full** (Dashboard) | 720×520 (resizable) | Full panel with priority tasks, todo list, plant SVG, and petal progress ring |
+## 🪴 Three Views
 
-## Features
+| View | Size | What it does |
+|------|------|--------------|
+| **Nano** | 48×68 | A tiny flower pinned to your screen edge. Hover for weekly stats. Transforms into a focus timer HUD |
+| **Mini** | 360×310 ↕ | Default home. A ceramic flowerpot with draggable task bubbles floating around the plant |
+| **Full** | 720×520 ↕ | Complete dashboard: priority board + todo list + plant + petal progress ring |
 
-- 🌱 **Living Plant System** — 4 leaves = 4 priorities. Complete tasks → leaves bloom. Overdue → leaves wilt/die
-- ⏱ **Focus Timer** — Click ⏱ on any task card to start a focus session. Nano strip shows task name + live timer. Auto-adapts width to task length. 25-minute cycle with progress bar
-- 🌓 **Dual Theme** — Dark Glass (emerald accents) / Warm Ceramic (Japanese pottery inspired), one-click toggle
-- 📅 **Smart Urgency** — Auto-calculated from deadlines. Gradient cards + urgency badges (3d+/2d/1d/overdue)
-- 🔄 **Weekly Archive** — Auto-detects week transitions, archives old data to history/
-- 🎨 **Rich Animations** — Particle effects on completion, bloom animations, breathing glow, shimmer wave, 25min cycle progress bar
-- 📌 **Always on Top** — Stays visible without getting in your way
+## ⚡ Features
 
-## Install & Run
+- 🌱 **Plant Metaphor** — 4 leaves = 4 priorities. Healthy if on track, wilted if overdue, blooming when complete
+- ⏱ **Focus Timer** — Click ⏱ on any task to enter focus mode. Nano strip shows task name + live timer with 25-min cycle progress bar
+- 🌓 **Dual Theme** — Dark Glass (emerald accents) / Warm Ceramic (Japanese pottery inspired). One-click toggle
+- 📅 **Smart Urgency** — Auto-calculated from deadlines. Gradient cards with urgency labels
+- 🎨 **Rich Animations** — Particle effects, bloom sequences, breathing glow, shimmer wave, focus progress bar
+- 🔒 **100% Local** — All data stored on your machine. No accounts, no cloud, no telemetry
 
-### Development
+<p align="center">
+  <img src="screenshots/light-mini.png" width="280" alt="Mini view — Light theme" />
+  <img src="screenshots/light-full.png" width="360" alt="Full view — Light theme" />
+  <br/><sub>Light theme — Warm Ceramic</sub>
+</p>
+
+## 🚀 Quick Start
 
 ```bash
-git clone https://github.com/your-username/timegarden.git
+git clone https://github.com/wl1650918245/timegarden.git
 cd timegarden
 npm install
 npm start
 ```
 
-### Build
+## 🔧 Tech
 
-```bash
-npm run build
-```
-
-Installer output in `dist/`.
-
-## Tech Stack
-
-| Layer | Tech |
-|-------|------|
+| Layer | Choice |
+|-------|--------|
 | Desktop | Electron 35 |
-| UI | HTML + CSS + Vanilla JS (single-file architecture) |
-| Graphics | Inline SVG (plant + petals + nano flower) |
-| Storage | Local JSON (`user-data/`) |
+| UI | HTML + CSS + Vanilla JS |
+| Graphics | Inline SVG |
+| Storage | Local JSON |
 
-## Project Structure
-
-```
-├── main.js              # Electron main process
-├── preload.js           # IPC bridge
-├── package.json
-├── src/
-│   ├── index.html       # Three-view HTML + inline SVGs
-│   ├── style.css        # Dark theme (Dark Glass)
-│   ├── style-old.css    # Light theme (Warm Ceramic)
-│   └── app.js           # All interaction logic
-├── CLAUDE.md            # AI-assisted dev guide
-├── SPEC.md              # Product requirements doc
-├── nano-spec.md         # Nano mode implementation spec
-└── README.md
-```
-
-## Shortcuts
+## ⌨️ Shortcuts
 
 | Key | Action |
 |-----|--------|
 | `ESC` | Full → Mini |
-| `Enter` | Confirm input |
 | Click flower | Nano → Mini |
 | Double-click flower | Nano → Full |
 | Right-click flower | Context menu |
 
-## Privacy
+## 🔐 Privacy
 
-All data is stored **locally on your computer** (`user-data/` directory). No telemetry, no analytics, no cloud sync, no network requests. Your tasks, deadlines, and focus records never leave your machine.
+Everything stays on your machine. No telemetry, no analytics, no accounts, no network requests. Period.
 
-## License
+## 📄 License
 
 MIT
