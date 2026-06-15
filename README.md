@@ -9,6 +9,10 @@
   <img src="screenshots/dark-full.png" width="360" alt="Full view — Dark theme" />
 </p>
 
+<p align="center">
+  <img src="screenshots/nano-flower.svg" width="64" alt="Nano flower" />
+</p>
+
 ---
 
 ## ✨ What is this?

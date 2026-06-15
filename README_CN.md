@@ -9,6 +9,10 @@
   <img src="screenshots/dark-full.png" width="360" alt="Full 面板 — 暗色主题" />
 </p>
 
+<p align="center">
+  <img src="screenshots/nano-flower.svg" width="64" alt="Nano 悬浮花" />
+</p>
+
 ---
 
 ## ✨ 这是什么

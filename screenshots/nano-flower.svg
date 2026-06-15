@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="72" viewBox="-8 -14 60 76">
+  <!-- Stem -->
+  <path d="M21 50 Q19 36 21 24 Q23 16 21 10" fill="none" stroke="#5a9c4f" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Leaves -->
+  <path d="M21 34 Q8 28 6 36 Q14 33 21 34" fill="#6aaa4a" opacity="0.85"/>
+  <path d="M21 28 Q36 22 38 30 Q32 27 21 28" fill="#7abf5a" opacity="0.85"/>
+  <path d="M21 42 Q6 38 4 46 Q14 41 21 42" fill="#6aaa4a" opacity="0.85"/>
+  <path d="M21 37 Q38 34 40 42 Q33 38 21 37" fill="#7abf5a" opacity="0.85"/>
+  <!-- Petals -->
+  <g transform="translate(21,8)">
+    <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5a0b8" opacity="0.9" transform="rotate(0)"/>
+    <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5b0c8" opacity="0.9" transform="rotate(72)"/>
+    <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5a0b8" opacity="0.9" transform="rotate(144)"/>
+    <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5b0c8" opacity="0.9" transform="rotate(216)"/>
+    <ellipse cx="0" cy="-6" rx="5" ry="7" fill="#f5a0b8" opacity="0.9" transform="rotate(288)"/>
+    <circle cx="0" cy="0" r="2.5" fill="#f5d76e"/>
+  </g>
+  <!-- Status dot -->
+  <circle cx="21" cy="54" r="3" fill="#4ade80" opacity="0.9"/>
+</svg>
