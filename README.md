@@ -5,12 +5,16 @@
 [中文](README_CN.md) | English
 
 <p align="center">
-  <img src="screenshots/dark-mini.png" width="360" alt="Mini view — Dark theme" />
   <img src="screenshots/dark-full.png" width="360" alt="Full view — Dark theme" />
+  <img src="screenshots/dark-mini.png" width="180" alt="Mini view — Dark theme" />
+  <br/><sub>Dark theme — Full &amp; Mini</sub>
 </p>
 
 <p align="center">
-  <img src="screenshots/nano-flower.svg" width="64" alt="Nano flower" />
+  <img src="screenshots/nano-flower.svg" width="48" alt="Nano flower" />
+  <img src="screenshots/nano-focus.png" height="60" alt="Nano focus — Dark" />
+  <img src="screenshots/nano-focus_light.png" height="60" alt="Nano focus — Light" />
+  <br/><sub>Nano flower · Focus mode (Dark) · Focus mode (Light)</sub>
 </p>
 
 ---
@@ -18,11 +22,6 @@
 ## ✨ What is this?
 
 TimeGarden turns your weekly priorities into a desktop plant. Complete tasks — leaves bloom into flowers. Miss deadlines — leaves wilt. Built-in focus timer, three view modes, and dual light/dark themes.
-
-<p align="center">
-  <img src="screenshots/nano-focus.png" height="60" alt="Nano focus mode" />
-  <br/><sub>Nano focus mode — 25min cycle with progress bar</sub>
-</p>
 
 ## 🪴 Three Views
 
@@ -42,8 +41,8 @@ TimeGarden turns your weekly priorities into a desktop plant. Complete tasks —
 - 🔒 **100% Local** — All data stored on your machine. No accounts, no cloud, no telemetry
 
 <p align="center">
-  <img src="screenshots/light-mini.png" width="280" alt="Mini view — Light theme" />
   <img src="screenshots/light-full.png" width="360" alt="Full view — Light theme" />
+  <img src="screenshots/light-mini.png" width="180" alt="Mini view — Light theme" />
   <br/><sub>Light theme — Warm Ceramic</sub>
 </p>
 
