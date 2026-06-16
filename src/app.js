@@ -17,6 +17,7 @@ let focusState = {
   taskList: '',        // 'important' | 'todos'
   startedAt: null,     // 本次专注开始时间戳
   accumulatedMs: 0,    // 历史累积毫秒
+  isPaused: false,     // 是否暂停
 };
 let focusInterval = null;
 
@@ -63,6 +64,7 @@ async function startFocus(taskId, listType) {
     taskList: listType,
     startedAt: Date.now(),
     accumulatedMs: task.weeklyTimeMs || 0,
+    isPaused: false,
   };
 
   startFocusTicking();
@@ -92,20 +94,41 @@ async function startFocus(taskId, listType) {
   await saveData();
 }
 
+function togglePause() {
+  if (!focusState.taskId) return;
+  if (focusState.isPaused) {
+    // 恢复
+    focusState.isPaused = false;
+    focusState.startedAt = Date.now();
+    startFocusTicking();
+  } else {
+    // 暂停：累积已过时间，停止计时
+    focusState.isPaused = true;
+    if (focusState.startedAt) {
+      focusState.accumulatedMs += Date.now() - focusState.startedAt;
+      focusState.startedAt = null;
+    }
+    stopFocusTicking();
+  }
+  updateNanoFocusDisplay();
+}
+
 async function stopFocus() {
   if (!focusState.taskId) return;
 
   // 先开冷却防 hover 回弹：缩窗后鼠标还在花上会触发 mouseenter 重新扩窗
   nanoCoolingDown = true;
 
-  // 累积时间写回任务
+  // 如果暂停中，先同步累积时间（startedAt 为 null，跳过即可）
+  // 如果计时中，累积剩余时间
   const list = focusState.taskList === 'important' ? state.important : state.todos;
   const task = list.find(t => t.id === focusState.taskId);
-  if (task && focusState.startedAt) {
-    task.weeklyTimeMs = (task.weeklyTimeMs || 0) + (Date.now() - focusState.startedAt);
+  if (task) {
+    const extra = focusState.startedAt ? (Date.now() - focusState.startedAt) : 0;
+    task.weeklyTimeMs = (task.weeklyTimeMs || 0) + focusState.accumulatedMs + extra;
   }
 
-  focusState = { taskId: null, taskTitle: '', taskList: '', startedAt: null, accumulatedMs: 0 };
+  focusState = { taskId: null, taskTitle: '', taskList: '', startedAt: null, accumulatedMs: 0, isPaused: false };
   stopFocusTicking();
   updateNanoFocusDisplay();
   renderNano();
@@ -133,7 +156,7 @@ function startFocusTicking() {
 }
 
 function stopFocusTicking() {
-  if (!focusState.taskId) {
+  if (focusInterval) {
     clearInterval(focusInterval);
     focusInterval = null;
   }
@@ -151,6 +174,13 @@ function updateNanoFocusDisplay() {
     strip.classList.add('active');
     taskName.textContent = focusState.taskTitle;
     timer.textContent = formatFocusTime(getFocusElapsed());
+
+    // 暂停/继续按钮图标
+    const pauseBtn = document.getElementById('focus-pause-btn');
+    if (pauseBtn) {
+      pauseBtn.textContent = focusState.isPaused ? '▶' : '⏸';
+      pauseBtn.title = focusState.isPaused ? '继续专注' : '暂停专注';
+    }
 
     // 25 分钟循环进度
     const totalMs = getFocusElapsed();
@@ -1318,6 +1348,13 @@ function setupEventListeners() {
   if (focusIcon) focusIcon.addEventListener('click', async (e) => {
     e.stopPropagation();
     if (focusState.taskId) await stopFocus();
+  });
+
+  // 专注条 ⏸/▶ 点击 = 暂停/继续
+  const pauseBtn = document.getElementById('focus-pause-btn');
+  if (pauseBtn) pauseBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    togglePause();
   });
 
   // 一键收到 Nano 悬浮花

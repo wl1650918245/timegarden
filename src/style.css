@@ -1024,6 +1024,16 @@ svg [fill*="url(#potGrad"] { filter: brightness(0.85); }
   filter: drop-shadow(0 0 6px rgba(251,113,133,0.6));
 }
 
+/* Pause/Resume button */
+.focus-pause-btn {
+  font-size: 10px; flex-shrink: 0; cursor: pointer; opacity: 0.5;
+  transition: all 0.2s var(--spring); line-height: 1; padding: 0 2px;
+}
+.focus-pause-btn:hover {
+  opacity: 1; transform: scale(1.25);
+  filter: drop-shadow(0 0 6px rgba(74,222,128,0.5));
+}
+
 /* ── 25min Cycle Progress Fill ── */
 #nano-focus-info.active::before {
   content: '';
